@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qline Menu</title>
+    <style>
+        :root {
+            --bg: #0d0d0d;
+            --card: rgba(255, 255, 255, 0.04);
+            --gold: #E1A91A;
+            --text: #fff;
+            --text-dim: rgba(255, 255, 255, 0.65);
+            --border: rgba(255, 255, 255, 0.06);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        .bg-animated {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at 20% 0%, rgba(225,169,26,0.03) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(225,169,26,0.03) 0%, transparent 50%);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: rgba(13,13,13,0.92);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+        .logo {
+            font-size: 26px;
+            color: var(--gold);
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .insta-btn {
+            border: 1.5px solid var(--gold);
+            color: var(--gold);
+            background: transparent;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        .insta-btn:hover {
+            background: var(--gold);
+            color: #000;
+            transform: translateY(-2px);
+        }
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px 20px;
+            position: relative;
+        }
+        .hero h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, #F5C842 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero .subtitle {
+            font-size: 17px;
+            color: var(--text-dim);
+            margin-bottom: 6px;
+        }
+        .hero .location {
+            font-size: 14px;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .tabs-wrapper {
+            position: sticky;
+            top: 73px;
+            z-index: 100;
+            background: linear-gradient(to bottom, var(--bg) 70%, transparent);
+            padding: 15px 0 25px 0;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        .tab {
+            padding: 11px 22px;
+            background: #111;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-dim);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+            user-select: none;
+            text-decoration: none;
+            text-align: center;
+        }
+        .tab:hover {
+            border-color: rgba(225,169,26,0.3);
+            color: #fff;
+        }
+        .tab.active {
+            background: var(--gold);
+            color: #000;
+            border-color: var(--gold);
+            box-shadow: 0 4px 15px rgba(225,169,26,0.25);
+        }
+        .menu-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px 60px 20px;
+        }
+        .menu-section {
+            margin-bottom: 50px;
+        }
+        .section-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--gold);
+            margin-bottom: 25px;
+            border-right: 4px solid var(--gold);
+            padding-right: 12px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover {
+            transform: translateY(-6px) scale(1.015);
+            border-color: rgba(225,169,26,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .card-img-wrap {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            background: #111;
+            overflow: hidden;
+        }
+        .card-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.6s ease;
+        }
+        .card:hover .card-img-wrap img {
+            transform: scale(1.06);
+        }
+        .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .card h3 {
+            font-size: 19px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+        .price {
+            color: var(--gold);
+            font-weight: 900;
+            font-size: 20px;
+            direction: rtl;
+        }
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: #080808;
+            border-top: 1px solid var(--border);
+        }
+        .footer-logo {
+            font-size: 22px;
+            color: var(--gold);
+            font-weight: 900;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+        footer p {
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+        @media(max-width: 640px) {
+            .hero h1 { font-size: 28px; }
+            .tabs { gap: 6px; }
+            .tab { padding: 9px 14px; font-size: 13px; }
+            .grid { grid-template-columns: 1fr; gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-animated"></div>
+
+    <header>
+        <div class="logo">Qline</div>
+        <div class="header-actions">
+            <a href="tel:+96877610006" class="insta-btn">📞 إتصال مباشر</a>
+            <a href="https://instagram.com/qline_om" target="_blank" class="insta-btn">إنستجرام</a>
+        </div>
+    </header>
+
+    <div class="hero">
+        <h1>Qline Menu</h1>
+        <div class="subtitle">طعم الفخامة في كل قرمشة</div>
+        <div class="location">📍 بهلاء، سلطنة عمان</div>
+    </div>
+
+    <div class="tabs-wrapper">
+        <div class="tabs">
+            <a href="#singles" class="tab active">الحبة</a>
+            <a href="#meals" class="tab">الوجبة</a>
+            <a href="#extras" class="tab">الإضافات</a>
+            <a href="#drinks" class="tab">المشروبات</a>
+        </div>
+    </div>
+
+    <div class="menu-container">
+
+        <!-- SECTION: SINGLES -->
+        <div id="singles" class="menu-section">
+            <div class="section-title">الحبة (ساندويش فقط)</div>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-img-wrap">
+                        <img src="IMG_6014.PNG" alt="سماش برجر">
+                    </div>
+                    <div class="card-body">
+                        <h3>سماش برجر</h3>
+                        <div class="card-footer">
+                            <span class="price">1.200 ر.ع</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img-wrap">
+                        <img src="IMG_6016.PNG" alt="تشوبد تشيز">
+                    </div>
+                    <div class="card-body">
+                        <h3>تشوبد تشيز</h3>
+                        <div class="card-footer">
+                            <span class="price">1.300 ر.ع</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: MEALS -->
+        <div id="meals" class="menu-section">
+            <div class="section-title">الوجبة (مع بطاطس ومشروب)</div>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-img-wrap">
+                        <img src="IMG_6018.PNG" alt="وجبة سماش برجر">
+                    </div>
+                    <div class="card-body">
+                        <h3>وجبة سماش برجر</h3>
+                        <div class="card-footer">
+                            <span class="price">1.600 ر.ع</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img-wrap">
+                        <img src="IMG_6020.PNG" alt="وجبة تشوبد تشيز">
+                    </div>
+                    <div class="card-body">
+                        <h3>وجبة تشوبد تشيز</h3>
+                        <div class="card-footer">
+                            <span class="price">1.700 ر.ع</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: EXTRAS -->
+        <div id="extras" class="menu-section">
+            <div class="section-title">الإضافات</div>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-img-wrap">
+                        <img src="IMG_6579.JPG.jpeg" alt="صوص خاص">
+                    </div>
+                    <div class="card-body">
+                        <h3>صوص خاص</h3>
+                        <div class="card-footer">
+                            <span class="price">0.200 ر.ع</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img-wrap">
+                        <img src="IMG_6581.PNG" alt="صوص الجبن">
+                    </div>
+                    <div class="card-body">
+                        <h3>صوص الجبن الفاخر</h3>
+                        <div class="card-footer">
+                            <span class="price">0.200 ر.ع</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: DRINKS -->
+        <div id="drinks" class="menu-section">
+            <div class="section-title">المشروبات</div>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-img-wrap">
+                        <img src="IMG_6575.PNG" alt="كنزا كولا">
+                    </div>
+                    <div class="card-body">
+                        <h3>كنزا كولا</h3>
+                        <div class="card-footer">
+                            <span class="price">0.300 ر.ع</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img-wrap">
+                        <img src="IMG_6567.PNG" alt="كنزا ليمون">
+                    </div>
+                    <div class="card-body">
+                        <h3>كنزا ليمون</h3>
+                        <div class="card-footer">
+                            <span class="price">0.300 ر.ع</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img-wrap">
+                        <img src="IMG_6577.PNG" alt="كنزا حمضيات">
+                    </div>
+                    <div class="card-body">
+                        <h3>كنزا حمضيات</h3>
+                        <div class="card-footer">
+                            <span class="price">0.300 ر.ع</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-logo">Qline</div>
+        <p>جميع الحقوق محفوظة © 2026 - مشروع Qline المنيو الرقمي</p>
+    </footer>
+
+    <script>
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
